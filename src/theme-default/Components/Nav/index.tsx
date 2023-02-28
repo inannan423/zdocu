@@ -2,6 +2,7 @@
 import styles from './index.module.scss';
 import { NavItemWithLink } from 'shared/types';
 import { usePageData } from '@runtime';
+import { SwitchAppearance } from '../SwitchAppearance';
 
 export function MenuItem(item: NavItemWithLink) {
     return (
@@ -17,12 +18,12 @@ export function Nav() {
     const { siteData } = usePageData();
     const nav = siteData.themeConfig?.nav || [];
     return (
-        <header relative="~" fixed="~" pos="t-0 l-0" w="full">
+        <header fixed="~" pos="t-0 l-0" w="full" z="10">
             <div
                 flex="~"
                 items="center"
                 justify="between"
-                className="px-8 h-14 divider-bottom"
+                className={`h-14 divider-bottom ${styles.nav}`}
             >
                 <div>
                     <a
@@ -30,7 +31,7 @@ export function Nav() {
                         hover="opacity-60"
                         className="w-full h-full text-1rem font-semibold flex items-center"
                     >
-                        Island.js
+                        zdocu
                     </a>
                 </div>
                 <div flex="~">
@@ -42,11 +43,13 @@ export function Nav() {
                     </div>
 
                     {/* 白天/夜间模式切换 */}
-                    {/* 下一节课介绍 */}
+                    <div before="menu-item-before" flex="~">
+                        <SwitchAppearance />
+                    </div>
 
                     {/* 相关链接 */}
-                    <div className={styles.socialLinkIcon} ml="2">
-                        <a title="more" href="/">
+                    <div className={styles.socialLinkIcon} before="menu-item-before">
+                        <a title='more' href="/">
                             <div className="i-carbon-logo-github w-5 h-5 fill-current"></div>
                         </a>
                     </div>

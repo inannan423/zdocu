@@ -3,6 +3,8 @@ import path, { relative, join } from 'path';
 import { normalizePath, Plugin } from 'vite';
 import { SiteConfig } from 'shared/types/index';
 import { PACKAGE_ROOT } from '../constants';
+import sirv from 'sirv';
+import fs from 'fs-extra';
 
 const SITE_DATA_ID = 'zdocu:site-data'; // 用于 vite 插件，虚拟模块，便于 UI 组件访问配置文件中的数据
 
@@ -60,6 +62,10 @@ export function pluginConfig(
         // 重启服务，重新加载配置文件
         await restartServer!();
       }
+    },
+    configureServer(server) {
+      const publicDir = join(config.root, 'public');
+      server.middlewares.use(sirv(publicDir));
     }
   };
 }

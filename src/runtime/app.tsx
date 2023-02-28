@@ -14,11 +14,12 @@ export async function initPageData(routePath: string): Promise<PageData> {
     const moduleInfo = await matched[0].route.preload();
     console.log(moduleInfo);
     return {
-      pageType: 'doc',
+      pageType: moduleInfo.frontmatter?.pageType ?? 'doc',
       siteData,
       // @ts-ignore
       frontmatter: moduleInfo.frontmatter,
-      pagePath: routePath
+      pagePath: routePath,
+      toc: moduleInfo.toc
     };
   }
   return {
