@@ -6,7 +6,7 @@ const Footer = () => {
   console.log(siteData);
   return (
     <footer className="w-full relative bg-white dark:bg-black border-t-1 border-gray-100 dark:border-gray-900 border-t-solid h-16 z-50 px-24 flex justify-between items-center">
-      <div className="w-max text-gray-300 font-sans">
+      <div className="w-max !text-sm text-gray-300 dark:text-gray-500 font-sans">
         {siteData.footer?.message}
       </div>
       <div className="w-max flex justify-center items-center">

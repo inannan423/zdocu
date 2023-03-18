@@ -4,7 +4,7 @@ export default defineConfig({
   title: 'zdocu',
   logo: '/logo.svg',
   footer: {
-    message: `@copyright ${new Date().getFullYear()} jetlab.Powered by zdocu`,
+    message: `@ copyright ${new Date().getFullYear()} jetlab.Powered by zdocu`,
     media: [
       {
         icon: '/github.svg',

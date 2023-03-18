@@ -81,6 +81,7 @@
     "@vitejs/plugin-react": "^2.2.0",
     "acorn": "^8.8.1",
     "cac": "^6.7.14",
+    "copy-to-clipboard": "^3.3.3",
     "esbuild": "^0.17.11",
     "fast-glob": "^3.2.12",
     "fs-extra": "^10.1.0",

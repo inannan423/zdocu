@@ -17,7 +17,7 @@ $sidebarPadding: calc(32px + (100vw - var(--zdocu-layout-max-width)) / 2);
 .content {
     // padding: 48px 24px;
     margin-left: calc(var(--zdocu-sidebar-width) + ((100vw - var(--zdocu-layout-max-width)) / 2) + 48px);
-    margin-right: $sidebarPadding;
+    // margin-right: $sidebarPadding;
     // 100 vw - sidebar 的宽度
     max-width: calc(100vw - $sidebarWidth);
 }

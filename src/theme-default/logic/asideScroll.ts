@@ -1,96 +1,168 @@
-/* eslint-disable prettier/prettier */
 import { throttle } from 'lodash-es';
+import { setupCopyCodeButton } from './copyCode';
+// import { inBrowser } from '../../shared/utils';
 
-let links: HTMLAnchorElement[] = [];
-
-const NAV_HEIGHT = 56;
+const DEFAULT_NAV_HEIGHT = 64;
 
 export function scrollToTarget(target: HTMLElement, isSmooth: boolean) {
-    const targetPadding = parseInt(
-        window.getComputedStyle(target).paddingTop,
-        10
-    );
-    const targetTop =
-        window.scrollY +
-        target.getBoundingClientRect().top +
-        targetPadding -
-        NAV_HEIGHT;
-    window.scrollTo({
-        left: 0,
-        top: targetTop,
-        behavior: isSmooth ? 'smooth' : 'auto'
-    });
+  const targetPadding = parseInt(
+    window.getComputedStyle(target).paddingTop,
+    10
+  );
+
+  const targetTop =
+    window.scrollY +
+    target.getBoundingClientRect().top -
+    DEFAULT_NAV_HEIGHT +
+    targetPadding;
+  // Only scroll smoothly in page header anchor
+  window.scrollTo({
+    left: 0,
+    top: targetTop,
+    ...(isSmooth ? { behavior: 'smooth' } : {})
+  });
 }
 
-export function bindingAsideScroll() {
-    const marker = document.getElementById('aside-marker');
-    const aside = document.getElementById('aside-container');
-    const headers = Array.from(aside?.getElementsByTagName('a') || []).map(
-        (item) => decodeURIComponent(item.hash)
-    );
-    if (!aside) {
-        return;
+// Control the scroll behavior of the browser when user clicks on a link
+function bindingWindowScroll() {
+  // Initial scroll position
+  function scrollTo(el: HTMLElement, hash: string, isSmooth = false) {
+    let target: HTMLElement | null = null;
+    try {
+      target = el.classList.contains('header-anchor')
+        ? el
+        : document.getElementById(decodeURIComponent(hash.slice(1)));
+    } catch (e) {
+      console.warn(e);
     }
+    if (target) {
+      scrollToTarget(target, isSmooth);
+    }
+  }
 
-    const activate = (links: HTMLAnchorElement[], index: number) => {
-        if (links[index]) {
-            const id = links[index].getAttribute('href');
-            const tocIndex = headers.findIndex((item) => item === id);
-            const currentLink = aside?.querySelector(`a[href="#${id?.slice(1)}"]`);
-            if (currentLink) {
-                // @ts-ignore
-                marker.style.top = `${33 + tocIndex * 28}px`;
-                // @ts-ignore
-                marker.style.opacity = '1';
-            }
+  window.addEventListener(
+    'click',
+    (e) => {
+      // Only handle a tag click
+      const link = (e.target as Element).closest('a');
+      if (link) {
+        const { origin, hash, target, pathname, search } = link;
+        const currentUrl = window.location;
+        // only intercept inbound links
+        if (hash && target !== '_blank' && origin === currentUrl.origin) {
+          // scroll between hash anchors in the same page
+          if (
+            pathname === currentUrl.pathname &&
+            search === currentUrl.search &&
+            hash &&
+            hash !== currentUrl.hash &&
+            link.classList.contains('header-anchor')
+          ) {
+            e.preventDefault();
+            history.pushState(null, '', hash);
+            // use smooth scroll when clicking on header anchor links
+            scrollTo(link, hash, true);
+            // still emit the event so we can listen to it in themes
+            window.dispatchEvent(new Event('hashchange'));
+          }
         }
-    };
+      }
+    },
+    { capture: true }
+  );
+  window.addEventListener('hashchange', (e) => {
+    e.preventDefault();
+  });
+}
 
-    const setActiveLink = () => {
-        links = Array.from(
-            document.querySelectorAll<HTMLAnchorElement>('.zdocu-doc .header-anchor')
-        ).filter((item) => item.parentElement?.tagName !== 'H1');
+// Binding the scroll event to the aside element
+export function bindingAsideScroll() {
+  function isBottom() {
+    return (
+      document.documentElement.scrollTop + window.innerHeight >=
+      document.documentElement.scrollHeight
+    );
+  }
+  const NAV_HEIGHT = 64;
+  const marker = document.getElementById('aside-marker');
+  const aside = document.getElementById('aside-container');
+  const links = Array.from(
+    document.querySelectorAll<HTMLAnchorElement>('.zdocu-doc .header-anchor')
+  ).filter((item) => item.parentElement?.tagName !== 'H1');
 
-        const isBottom =
-            document.documentElement.scrollTop + window.innerHeight >=
-            document.documentElement.scrollHeight;
+  if (!aside || !links.length) {
+    return;
+  }
 
-        if (isBottom) {
-            activate(links, links.length - 1);
-            return;
+  let prevActiveLink: null | HTMLAnchorElement = null;
+  const headers = Array.from(aside?.getElementsByTagName('a') || []).map(
+    (item) => decodeURIComponent(item.hash)
+  );
+  if (marker && !headers.length) {
+    marker.style.opacity = '0';
+    return;
+  }
+  // Util function to set dom ref after determining the active link
+  const activate = (links: HTMLAnchorElement[], index: number) => {
+    if (prevActiveLink) {
+      prevActiveLink.classList.remove('aside-active');
+    }
+    if (links[index]) {
+      links[index].classList.add('aside-active');
+      const id = links[index].getAttribute('href');
+      const tocIndex = headers.findIndex((item) => item === id);
+      const currentLink = aside?.querySelector(`a[href="#${id?.slice(1)}"]`);
+      if (currentLink) {
+        prevActiveLink = currentLink as HTMLAnchorElement;
+        // Activate the a link element in aside
+        prevActiveLink.classList.add('aside-active');
+        // Activate the marker element
+        marker!.style.top = `${33 + tocIndex * 28}px`;
+        marker!.style.opacity = '1';
+      }
+    }
+  };
+  const setActiveLink = () => {
+    if (isBottom()) {
+      activate(links, links.length - 1);
+    } else {
+      // Compute current index
+      for (let i = 0; i < links.length; i++) {
+        const currentAnchor = links[i];
+        const nextAnchor = links[i + 1];
+        const scrollTop = window.scrollY;
+        const currentAnchorTop =
+          currentAnchor.parentElement!.offsetTop - NAV_HEIGHT;
+        if ((i === 0 && scrollTop < currentAnchorTop) || scrollTop === 0) {
+          activate(links, 0);
+          break;
         }
 
-        for (let i = 0; i < links.length; i++) {
-            const currentAnchor = links[i];
-            const nextAnchor = links[i + 1];
-            const scrollTop = Math.ceil(window.scrollY);
-            // @ts-ignore
-            const currentAnchorTop = currentAnchor.parentElement?.offsetTop - NAV_HEIGHT;
-
-            if (!nextAnchor) {
-                activate(links, i);
-                break;
-            }
-
-            if ((i === 0 && scrollTop < currentAnchorTop) || scrollTop == 0) {
-                activate(links, 0);
-                break;
-            }
-
-            // @ts-ignore
-            const nextAnchorTop = nextAnchor.parentElement.offsetTop - NAV_HEIGHT;
-            if (scrollTop >= currentAnchorTop && scrollTop < nextAnchorTop) {
-                activate(links, i);
-                break;
-            }
+        if (!nextAnchor) {
+          activate(links, i);
+          break;
         }
-    };
 
-    const throttledSetActiveLink = throttle(setActiveLink, 100);
+        const nextAnchorTop = nextAnchor.parentElement!.offsetTop - NAV_HEIGHT;
 
-    window.addEventListener('scroll', throttledSetActiveLink);
+        if (scrollTop >= currentAnchorTop && scrollTop < nextAnchorTop) {
+          activate(links, i);
+          break;
+        }
+      }
+    }
+  };
+  const throttledSetLink = throttle(setActiveLink, 200);
 
-    return () => {
-        window.removeEventListener('scroll', throttledSetActiveLink);
-    };
+  window.addEventListener('scroll', throttledSetLink);
+
+  // eslint-disable-next-line consistent-return
+  return () => {
+    window.removeEventListener('scroll', throttledSetLink);
+  };
+}
+
+export function setup() {
+  bindingWindowScroll();
+  setupCopyCodeButton();
 }

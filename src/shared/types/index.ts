@@ -131,3 +131,5 @@ export interface FrontMatter {
 export type PropsWithIsland = {
   __island?: boolean;
 };
+
+export type ComponentPropsWithIsland<T = unknown> = T & { __island?: boolean };

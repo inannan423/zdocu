@@ -1,70 +1,103 @@
-/* eslint-disable prettier/prettier */
-import { Header, PropsWithIsland } from 'shared/types';
-import { useRef, useEffect } from 'react';
+import { useEffect, useRef } from 'react';
+import { ComponentPropsWithIsland, Header } from 'shared/types/index';
 import { bindingAsideScroll, scrollToTarget } from '../../logic/asideScroll';
 import { useHeaders } from '../../logic/useHeaders';
 
-interface AsideProps {
+export function Aside(
+  props: ComponentPropsWithIsland<{
     headers: Header[];
-}
+    pagePath: string;
+    outlineTitle: string;
+  }>
+) {
+  const [headers, setHeaders] = useHeaders(props.headers || [], props.pagePath);
+  const hasOutline = headers.length > 0;
+  // For outline text highlight
+  const markerRef = useRef<HTMLDivElement>(null);
+  // We promise: in complete dev/prod render process, the hooks order will be consistent
+  if (import.meta.env.ENABLE_SPA || import.meta.env.DEV) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useEffect(() => {
+      if (markerRef.current) {
+        markerRef.current.style.opacity = '0';
+      }
+      const unbinding = bindingAsideScroll();
+      if (!window.location.hash) {
+        window.scrollTo(0, 0);
+      } else {
+        const headerId = window.location.hash.slice(1);
+        const target = document.getElementById(headerId);
+        target && scrollToTarget(target, false);
+      }
+      return unbinding;
+    }, [headers]);
+  }
+  useEffect(() => {
+    setHeaders(props.headers);
+  }, [props.headers, setHeaders, props.pagePath]);
 
-export function Aside(props: AsideProps & PropsWithIsland) {
-    const { headers: rawHeaders = [] } = props;
-    const headers = useHeaders(rawHeaders);
-    // 是否展示大纲栏
-    const hasOutline = headers.length > 0;
-    // 当前标题会进行高亮处理，我们会在这个标题前面加一个 marker 元素
-    const markerRef = useRef<HTMLDivElement>(null);
-
-    const renderHeader = (header: Header) => {
-        return (
-            <li key={header.id}>
-                <a
-                    href={`#${header.id}`}
-                    className="block leading-7 text-text-2 hover:text-text-1"
-                    transition="color duration-300"
-                    style={{
-                        paddingLeft: (header.depth - 2) * 12
-                    }}
-                >
-                    {header.text}
-                </a>
-            </li>
-        );
-    };
-
+  const renderHeader = (header: Header) => {
     return (
-        <div
-            flex="~ col 1"
-            style={{
-                width: 'var(--zdocu-aside-width)'
-            }}
+      <li key={header.id}>
+        <a
+          href={`#${header.id}`}
+          block=""
+          leading-7=""
+          text="text-2"
+          avoid-text-overflow=""
+          hover="text-text-1"
+          transition="color duration-300"
+          style={{
+            paddingLeft: (header.depth - 2) * 12
+          }}
+          className="w-32 truncate"
+          onClick={(e) => {
+            e.preventDefault();
+            const target = document.getElementById(header.id);
+            target && scrollToTarget(target, false);
+          }}
         >
-            <div>
-                {hasOutline && (
-                    <div
-                        id="aside-container"
-                        className="relative divider-left pl-4 text-13px font-medium"
-                    >
-                        <div
-                            ref={markerRef}
-                            id="aside-marker"
-                            className="absolute top-33px opacity-0 w-1px h-18px bg-brand"
-                            style={{
-                                left: '-1px',
-                                transition:
-                                    'top 0.25s cubic-bezier(0, 1, 0.5, 1), background-color 0.5s, opacity 0.25s'
-                            }}
-                        ></div>
-                        <div leading-7="~" text="13px" font="semibold">
-                            OUTLINE
-                        </div>
-                        <nav>
-                            <ul className='relative truncate'>{headers.map(renderHeader)}</ul>
-                        </nav>
-                    </div>
-                )}
-            </div>
-        </div>
+          {header.text}
+        </a>
+      </li>
     );
+  };
+
+  return (
+    <div flex="~ col 1">
+      <div display={`${hasOutline ? 'lg:block' : 'none'}`}>
+        <div
+          relative=""
+          divider-left=""
+          p="l-4"
+          text="13px"
+          font-medium=""
+          id="aside-container"
+        >
+          <div
+            absolute=""
+            pos="top-33px"
+            opacity="0"
+            w="1px"
+            h="18px"
+            bg="brand"
+            ref={markerRef}
+            style={{
+              left: '-1px',
+              transition:
+                'top 0.25s cubic-bezier(0, 1, 0.5, 1), background-color 0.5s, opacity 0.25s'
+            }}
+            id="aside-marker"
+          ></div>
+          <div block="~" leading-7="" text="13px" font="semibold">
+            {props.outlineTitle}
+          </div>
+          <nav>
+            <div>OUTLINES</div>
+            <ul relative="">{headers.map(renderHeader)}</ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  );
 }
