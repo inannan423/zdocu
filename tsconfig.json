@@ -13,6 +13,7 @@
       "shared/*": ["shared/*"]
     },
     "strict": true,
+    // 不检查
   },
   "include": ["e2e/**/*.ts", "src/**/*"],
 }

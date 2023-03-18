@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable prettier/prettier */
 import { usePageData } from '@runtime';
@@ -7,7 +8,7 @@ import { HomeFeature } from '../../components/HomeFeature/index';
 export function HomeLayout() {
     const { frontmatter } = usePageData();
     return (
-        <div>
+        <div className='bg-white dark:bg-black'>
             {/* @ts-ignore */}
             <HomeHero hero={frontmatter.hero} />
             {/* @ts-ignore */}

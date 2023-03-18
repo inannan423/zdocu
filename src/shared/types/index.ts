@@ -36,9 +36,21 @@ export interface Footer {
   copyright?: string;
 }
 
+export interface MainFooter {
+  message?: string;
+  // 媒体链接
+  media?: {
+    icon: string;
+    link: string;
+    name: string;
+  }[];
+}
+
 // 用户信息配置
 export interface UserConfig {
   title?: string;
+  logo?: string;
+  footer?: MainFooter;
   description?: string;
   themeConfig?: ThemeConfig;
   vite?: ViteConfiguration;
@@ -115,3 +127,7 @@ export interface FrontMatter {
   features?: Feature[];
   hero?: Hero;
 }
+
+export type PropsWithIsland = {
+  __island?: boolean;
+};

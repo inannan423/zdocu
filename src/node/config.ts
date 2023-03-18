@@ -67,6 +67,8 @@ export async function resolveUserConfig(
 export function resolveSiteData(userConfig: UserConfig): UserConfig {
   return {
     title: userConfig.title || 'zdocu',
+    logo: userConfig.logo || '',
+    footer: userConfig.footer || {},
     description:
       userConfig.description || 'A React-vite-powered Static Site Generator',
     themeConfig: userConfig.themeConfig || {},

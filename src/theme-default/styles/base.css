@@ -1,3 +1,8 @@
+@font-face {  
+  font-family: PingFang SC;  
+  src: url('/PingFangSC.ttf');
+}
+
 *,
 ::before,
 ::after {
@@ -9,6 +14,7 @@ html {
   font-size: 16px;
   text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
+  font-family: pingfang sc, "PingFang SC", helvetica neue, helvetica, hiragino sans gb, microsoft yahei, arial, "JetBrains Mono custom", -apple-system !important;
 }
 
 html.dark {
@@ -31,6 +37,7 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-family: pingfang sc, "PingFang SC", helvetica neue, helvetica, hiragino sans gb, microsoft yahei, arial, "JetBrains Mono custom", -apple-system !important;
 }
 
 main {
@@ -214,4 +221,29 @@ select {
 fieldset {
   margin: 0;
   padding: 0;
+}
+
+::-webkit-scrollbar {
+  width: 3px;
+  height: 3px;
+}
+
+::-webkit-scrollbar-track-piece {
+  background-color: transparent;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  cursor: pointer;
+  background-color: var(--zdocu-c-brand);
+  border-radius: 20px;
+  transition: all 1s ease-in-out;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--zdocu-c-brand-light);
+}
+
+::-webkit-scrollbar-corner {
+  display: block;
 }

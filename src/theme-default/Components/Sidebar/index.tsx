@@ -13,13 +13,9 @@ export function Sidebar(props: SidebarProps) {
     const renderGroupItem = (item: SidebarItem) => {
         const active = item.link === pathname;
         return (
-            <div ml="5">
+            <div>
                 <div
-                    p="1"
-                    block="~"
-                    text="sm"
-                    font-medium="~"
-                    className={`${active ? 'text-brand' : 'text-text-2'}`}
+                    className={`${active ? 'text-black dark:text-white underline decoration-brand decoration-dashed decoration-2 underline-offset-8' : 'text-text-2 decoration-[0px]'} block text-base font-medium py-1 transition-all ease-in-out duration-900`}
                 >
                     <Link href={item.link}>{item.text}</Link>
                 </div>
@@ -29,13 +25,14 @@ export function Sidebar(props: SidebarProps) {
 
     const renderGroup = (item: SidebarGroup) => {
         return (
-            <section key={item.text} block="~" not-first="divider-top mt-4">
+            // not-first:divider-top 
+            <section key={item.text} className="block mt-4">
                 <div flex="~" justify="between" items="center">
                     <h2 m="t-3 b-2" text="1rem text-1" font="bold">
                         {item.text}
                     </h2>
                 </div>
-                <div mb="1">
+                <div className='mb-1'>
                     {item.items?.map((item) => (
                         <div key={item.link}>{renderGroupItem(item)}</div>
                     ))}
@@ -45,8 +42,8 @@ export function Sidebar(props: SidebarProps) {
     };
 
     return (
-        <aside className={styles.sidebar}>
+        <aside className={`${styles.sidebar} !bg-white dark:!bg-black !pl-24`} >
             <nav>{sidebarData.map(renderGroup)}</nav>
-        </aside>
+        </aside >
     );
 }

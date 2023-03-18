@@ -5,13 +5,13 @@ import { Button } from '../Button/index';
 export function HomeHero(props: { hero: Hero }) {
     const { hero } = props;
     return (
-        <div m="auto" p="t-20 x-16 b-16">
-            <div flex="~" className="max-w-1152px" m="auto">
-                <div text="left" flex="~ col" className="max-w-592px">
-                    <h1 font="bold" text="6xl" className="max-w-576px">
+        <div className="m-auto pt-20 px-24 pb-16">
+            <div className="flex m-auto w-full">
+                <div className="w-1/2 flex flex-col text-left">
+                    <h1 className="w-full text-5xl font-bold font-sans my-2">
                         <span className={styles.clip}>{hero.name}</span>
                     </h1>
-                    <p text="6xl" font="bold" className="max-w-576px">
+                    <p className="w-full text-5xl font-bold text-gray-600">
                         {hero.text}
                     </p>
                     <p

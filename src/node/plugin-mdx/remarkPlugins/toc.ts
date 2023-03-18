@@ -5,8 +5,6 @@ import { Root } from 'hast';
 import type { MdxjsEsm, Program } from 'mdast-util-mdxjs-esm';
 import { parse } from 'acorn';
 
-const slugger = new Slugger();
-
 interface TocItem {
   id: string;
   text: string;
@@ -22,36 +20,15 @@ interface ChildNode {
 export const remarkPluginToc: Plugin<[], Root> = () => {
   return (tree) => {
     const toc: TocItem[] = [];
+    const slugger = new Slugger();
     visit(tree, 'heading', (node) => {
+      // @ts-ignore
       if (!node.depth || !node.children) {
         return;
       }
-      // h2 ~ h4
+      // @ts-ignore
       if (node.depth > 1 && node.depth < 5) {
-        // node.children 是一个数组，包含几种情况:
-        // 1. 文本节点，如 '## title'
-        // 结构如下:
-        // {
-        //   type: 'text',
-        //   value: 'title'
-        // }
-        // 2. 链接节点，如 '## [title](/path)'
-        // 结构如下:
-        // {
-        //   type: 'link',
-        //   children: [
-        //     {
-        //       type: 'text',
-        //       value: 'title'
-        //     }
-        //   ]
-        // }
-        // 3. 内联代码节点，如 '## `title`'
-        // 结构如下:
-        // {
-        //   type: 'inlineCode',
-        //   value: 'title'
-        // }
+        // @ts-ignore
         const originText = (node.children as ChildNode[])
           .map((child) => {
             switch (child.type) {
@@ -66,6 +43,7 @@ export const remarkPluginToc: Plugin<[], Root> = () => {
         toc.push({
           id,
           text: originText,
+          // @ts-ignore
           depth: node.depth
         });
       }

@@ -3,7 +3,7 @@ import { Feature } from 'shared/types';
 
 export function HomeFeature(props: { features: Feature[] }) {
     return (
-        <div className="max-w-1152px" m="auto" flex="~ wrap" justify="between">
+        <div className="px-24 m-auto flex flex-wrap justify-between">
             {props.features.map((feature) => {
                 const { icon, title, details } = feature;
                 return (

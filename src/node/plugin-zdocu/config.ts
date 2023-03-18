@@ -6,6 +6,7 @@ import { PACKAGE_ROOT } from '../constants';
 import sirv from 'sirv';
 import fs from 'fs-extra';
 
+const themePath = path.resolve(PACKAGE_ROOT, 'src', 'theme-default');
 const SITE_DATA_ID = 'zdocu:site-data'; // 用于 vite 插件，虚拟模块，便于 UI 组件访问配置文件中的数据
 
 export function pluginConfig(
@@ -43,10 +44,14 @@ export function pluginConfig(
 
     // 配置文件热更新，ctx：文件变化的上下文
     async handleHotUpdate(ctx) {
-      console.log('watched path:' + config.configPath);
+      // console.log('watched path:' + config.configPath);
       // const customWatchedFiles = [config.configPath]; // 需要监听的文件
       // 改为：
-      const customWatchedFiles = [normalizePath(config.configPath)]; // 需要监听的文件
+      // 需要监听的文件
+      const customWatchedFiles = [
+        normalizePath(config.configPath),
+        normalizePath(themePath)
+      ];
       const include = (id: string) => {
         console.log('changed file s path:' + id);
         return customWatchedFiles.some((file) => id.includes(file));
@@ -63,6 +68,12 @@ export function pluginConfig(
         await restartServer!();
       }
     },
+
+    // 监听 src/theme-default 文件夹的所有文件，如果文件发生变化，重新启动服务
+    // async handleHotUpdateTheme(ctx) {
+    //   const customWatchedFiles = [normalizePath(themePath)]; // 需要监听的文件
+    // }
+
     configureServer(server) {
       const publicDir = join(config.root, 'public');
       server.middlewares.use(sirv(publicDir));

@@ -1,11 +1,27 @@
 import { defineConfig } from '../dist';
 
 export default defineConfig({
-  title: 'xxx',
+  title: 'zdocu',
+  logo: '/logo.svg',
+  footer: {
+    message: `@copyright ${new Date().getFullYear()} jetlab.Powered by zdocu`,
+    media: [
+      {
+        icon: '/github.svg',
+        link: 'https://github.com',
+        name: 'github'
+      },
+      {
+        icon: '/juejin.svg',
+        link: 'https://juejin.cn',
+        name: 'juejin'
+      }
+    ]
+  },
   themeConfig: {
     nav: [
-      { text: '主页', link: '/' },
-      { text: '指南', link: '/guide/' }
+      { text: 'Home', link: '/' },
+      { text: 'Guide', link: '/guide/' }
     ],
     // 新增 sidebar 的内容
     sidebar: {
@@ -26,8 +42,17 @@ export default defineConfig({
               link: '/guide/c'
             }
           ]
+        },
+        {
+          text: '进阶',
+          items: [
+            {
+              text: '高级配置',
+              link: '/guide/c'
+            },
+          ]
         }
-      ]
+      ],
     }
   }
 });

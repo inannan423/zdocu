@@ -22,14 +22,15 @@ export function DocLayout() {
     return (
         <div>
             <Sidebar sidebarData={matchedSidebar} pathname={pathname} />
-            <div className={styles.content} flex="~">
+            <div className={`${styles.content}`} flex="~">
                 <div className={styles.docContent}>
                     <div className="zdocu-doc">
                         <Content />
                     </div>
                     <DocFooter />
                 </div>
-                <div className={styles.asideContainer}>
+                <div className={`${styles.asideContainer}`}>
+                    {/* @ts-ignore */}
                     <Aside headers={toc} __island />
                 </div>
             </div>

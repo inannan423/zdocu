@@ -6,6 +6,7 @@ import '../styles/doc.css';
 import 'uno.css';
 import { HomeLayout } from './HomeLayout/index';
 import { DocLayout } from './DocLayout';
+import Footer from '../Components/Footer';
 
 export function Layout() {
   const pageData = usePageData();
@@ -20,7 +21,7 @@ export function Layout() {
     }
   };
   return (
-    <div>
+    <div className="bg-white dark:bg-black w-full">
       <Nav />
       <section
         style={{
@@ -29,6 +30,7 @@ export function Layout() {
       >
         {getContent()}
       </section>
+      <Footer />
     </div>
   );
 }

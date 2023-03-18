@@ -15,7 +15,7 @@ $sidebarWidth: calc(var(--zdocu-sidebar-width) + ((100vw - var(--zdocu-layout-ma
 $sidebarPadding: calc(32px + (100vw - var(--zdocu-layout-max-width)) / 2);
 
 .content {
-    padding: 48px 24px;
+    // padding: 48px 24px;
     margin-left: calc(var(--zdocu-sidebar-width) + ((100vw - var(--zdocu-layout-max-width)) / 2) + 48px);
     margin-right: $sidebarPadding;
     // 100 vw - sidebar 的宽度
@@ -23,6 +23,16 @@ $sidebarPadding: calc(32px + (100vw - var(--zdocu-layout-max-width)) / 2);
 }
 
 .doc-content {
+    font-family: pingfang sc,
+        "PingFang SC",
+        helvetica neue,
+        helvetica,
+        hiragino sans gb,
+        microsoft yahei,
+        arial,
+        "JetBrains Mono custom",
+        -apple-system;
+    ;
     margin-right: 80px;
     min-width: 768px;
     // 正文部分最大宽度: 100vw - sidebar 的宽度 - aside 的宽度 - 右边的 padding 和 margin

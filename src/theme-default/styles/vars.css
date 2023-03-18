@@ -28,7 +28,7 @@
   --zdocu-c-gray-dark-4: #282828;
   --zdocu-c-gray-dark-5: #202020;
 
-  --zdocu-c-divider-light-1: rgba(60, 60, 60, 0.29);
+  --zdocu-c-divider-light-1: rgba(60, 60, 60, 0.011);
   --zdocu-c-divider-light-2: rgba(60, 60, 60, 0.12);
   --zdocu-c-divider-dark-1: rgba(84, 84, 84, 0.65);
   --zdocu-c-divider-dark-2: rgba(84, 84, 84, 0.48);
@@ -50,12 +50,21 @@
   --zdocu-c-text-dark-3: rgba(235, 235, 235, 0.38);
   --zdocu-c-text-dark-4: rgba(235, 235, 235, 0.18);
 
-  --zdocu-c-green: #21b8a3;
+  --zdocu-c-green: #10b981;
   --zdocu-c-green-light: #41c6b0;
   --zdocu-c-green-lighter: #41c6b0;
   --zdocu-c-green-dark: #149684;
   --zdocu-c-green-darker: #149684;
   --zdocu-c-green-dimm: #062521;
+
+  --zdocu-c-blue: #1ad6ff;
+  --zdocu-c-blue-light: #3bd0f2;
+  --zdocu-c-blue-lighter: #4adcfd;
+  --zdocu-c-blue-dark: #0f9bb9;
+  --zdocu-c-blue-darker: #0f9bb9;
+  --zdocu-c-blue-dimm: #0a2c3a;
+  
+  
 
   --zdocu-c-green-dimm-1: rgba(66, 184, 131, 0.5);
   --zdocu-c-green-dimm-2: rgba(66, 184, 131, 0.25);
@@ -143,9 +152,8 @@
  * -------------------------------------------------------------------------- */
 
 :root {
-  --zdocu-font-family-base: 'Inter var experimental', 'Inter var',
-    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
-    Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  /* font-family: pingfang sc, "PingFang SC", helvetica neue, helvetica, hiragino sans gb, microsoft yahei, arial, "JetBrains Mono custom", -apple-system !important; */
+  --zdocu-font-family-base: pingfang sc, "PingFang SC", helvetica neue, helvetica, hiragino sans gb, microsoft yahei, arial, "JetBrains Mono custom", -apple-system;
   --zdocu-font-family-mono: Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
